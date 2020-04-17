@@ -22,9 +22,7 @@
     <hr>
       <div class="thetable">
         <div class="row">
-          <div class="cells headings">
-          </div>
-          <div v-for="(h,indexh) in [2,3,4,5,6,7,8,9]" :key="indexh" class="cells headings">
+          <div v-for="(h,indexh) in [1,2,3,4,5,6,7,8,9,10]" :key="indexh" class="cells headings">
             {{h}}
           </div>
         </div>
@@ -51,10 +49,9 @@ export default {
     }
   },
   created() {
-    
-    for (let j=2; j<10; j++) {
+    for (let j=2; j<11; j++) {
       let row = []
-      for (let i=2; i<10; i++) {
+      for (let i=2; i<11; i++) {
         row.push({value: j*i, isVisible: false});        
       }
       this.items.push(row);
@@ -101,12 +98,12 @@ export default {
 
 .thetable {
   border:1px solid darkgray;
-  font-size: 0.8em;
+  font-size: 0.7em;
 }
 
 .row {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(10, 1fr);
 }
 
 .cells{
