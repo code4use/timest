@@ -1,7 +1,7 @@
 <template>
   <div class="timest">
-    <div class="display">{{current}}</div>
-    <div v-on:click="click" class="keyscontainer">
+    <div class="display">{{current || '0'}}</div>
+    <div @click="clickkey" class="keyscontainer">
     <div class="keys">1</div>
     <div class="keys">2</div>
     <div class="keys">3</div>
@@ -30,8 +30,8 @@
         </div>
         <div v-for="(row,indexi) in items" :key="indexi" class="row"> 
           <div class="cells headings">{{indexi+2}}</div>
-          <div v-for="(cell,indexj) in row" :key="indexj" class="cells">
-            {{ cell }}
+          <div @click="clickcell(indexi,indexj)" v-for="(cell,indexj) in row" :key="indexj" class="cells">
+            <span v-show="cell.isVisible"> {{ cell.value }} </span>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@ export default {
   },
   data() {
     return {
-      current: '123',
+      current: '',
       items: []
     }
   },
@@ -55,15 +55,22 @@ export default {
     for (let j=2; j<10; j++) {
       let row = []
       for (let i=2; i<10; i++) {
-        row.push(j*i);        
+        row.push({value: j*i, isVisible: false});        
       }
       this.items.push(row);
     }
   },
   methods: {
-    click(event) {
-      console.log(event);
-    }
+    clickkey(event) {
+      if ("0123456789".includes(event.target.textContent)) {
+        this.current+=event.target.textContent;
+      }
+    },
+    clickcell(i,j) {
+      this.items[i][j].isVisible=!this.items[i][j].isVisible;
+      if(i!=j) this.items[j][i].isVisible=this.items[i][j].isVisible;
+  }
+
   }
 
 }
