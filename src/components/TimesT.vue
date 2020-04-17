@@ -30,7 +30,7 @@
         </div>
         <div v-for="(row,indexi) in items" :key="indexi" class="row"> 
           <div class="cells headings">{{indexi+2}}</div>
-          <div @click="clickcell(indexi,indexj)" v-for="(cell,indexj) in row" :key="indexj" class="cells">
+          <div @click="clickcell(indexi,indexj,$event)" v-for="(cell,indexj) in row" :key="indexj" class="cells">
             <span v-show="cell.isVisible"> {{ cell.value }} </span>
           </div>
         </div>
@@ -66,7 +66,8 @@ export default {
         this.current+=event.target.textContent;
       }
     },
-    clickcell(i,j) {
+    // eslint-disable-next-line no-unused-vars
+    clickcell(i,j,event) {
       this.items[i][j].isVisible=!this.items[i][j].isVisible;
       if(i!=j) this.items[j][i].isVisible=this.items[i][j].isVisible;
   }
