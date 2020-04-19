@@ -1,23 +1,19 @@
 <template>
-  <div class="timest">
-    <div class="display">{{current || '0'}}</div>
+  <div class="timest" >
+    <div class="display">{{ current || '0' }}</div>
     <div @click="clickkey" class="keyscontainer">
     <div class="keys">1</div>
     <div class="keys">2</div>
     <div class="keys">3</div>
-    <div class="keys">&times;</div>
     <div class="keys">4</div>
     <div class="keys">5</div>
     <div class="keys">6</div>
-    <div class="keys">&div;</div>
     <div class="keys">7</div>
     <div class="keys">8</div>
     <div class="keys">9</div>
-    <div class="keys">&plus;</div>
-    <div class="keys">0</div>
     <div class="keys">Reset</div>
+    <div class="keys">0</div>
     <div class="keys">Del</div>
-    <div class="keys">&minus;</div>
     </div>
     <hr>
       <div class="thetable">
@@ -43,25 +39,34 @@ export default {
     msg: String
   },
   data() {
-    return {
-      current: '',
-      items: []
-    }
+    return { current: '', items: [] }
   },
   created() {
     for (let j=2; j<11; j++) {
       let row = []
       for (let i=2; i<11; i++) {
-        row.push({value: j*i, isVisible: false});        
+        row.push({value: j*i, nHits: 0, nMistakes: 0, isVisible: false});        
       }
       this.items.push(row);
+      window.addEventListener('keydown', this.keydown);
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.keydown);
   },
   methods: {
     clickkey(event) {
       if ("0123456789".includes(event.target.textContent)) {
         this.current+=event.target.textContent;
+      } else if (event.target.textContent === 'Del') {
+        this.current=this.current.slice(0,-1);
       }
+    },
+    keydown(event) {
+      if ('0123456789'.includes(event.key)) this.current+=event.key;
+      else if (event.key === 'Delete' || event.key === 'Backspace')
+        this.current=this.current.slice(0,-1);
+      //console.log(event);
     },
     // eslint-disable-next-line no-unused-vars
     clickcell(i,j,event) {
@@ -82,7 +87,7 @@ export default {
 }
 .keyscontainer {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: minmax(40px,auto);
 }
 .keys {
