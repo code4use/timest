@@ -1,5 +1,20 @@
 <template>
   <div class="timest" >
+    <hr>
+      <div class="thetable">
+        <div class="row">
+          <div v-for="(h,indexh) in [1,2,3,4,5,6,7,8,9,10]" :key="indexh" class="cells headings">
+            {{h}}
+          </div>
+        </div>
+        <div v-for="(row,indexi) in items" :key="indexi" class="row"> 
+          <div class="cells headings">{{indexi+2}}</div>
+          <div @click="clickcell(indexi,indexj,$event)" v-for="(cell,indexj) in row" :key="indexj" class="cells">
+            <span ref="refCell" v-show="cell.isVisible"> {{ cell.value }} </span>
+          </div>
+        </div>
+      </div>
+    <hr>
     <div class="display">{{ current || '0' }}</div>
     <div @click="clickkey" class="keyscontainer">
     <div class="keys">1</div>
@@ -15,20 +30,6 @@
     <div class="keys">0</div>
     <div class="keys">Del</div>
     </div>
-    <hr>
-      <div class="thetable">
-        <div class="row">
-          <div v-for="(h,indexh) in [1,2,3,4,5,6,7,8,9,10]" :key="indexh" class="cells headings">
-            {{h}}
-          </div>
-        </div>
-        <div v-for="(row,indexi) in items" :key="indexi" class="row"> 
-          <div class="cells headings">{{indexi+2}}</div>
-          <div @click="clickcell(indexi,indexj,$event)" v-for="(cell,indexj) in row" :key="indexj" class="cells">
-            <span v-show="cell.isVisible"> {{ cell.value }} </span>
-          </div>
-        </div>
-      </div>
   </div>
 </template>
 
@@ -44,12 +45,15 @@ export default {
   created() {
     for (let j=2; j<11; j++) {
       let row = []
-      for (let i=2; i<11; i++) {
-        row.push({value: j*i, nHits: 0, nMistakes: 0, isVisible: false});        
-      }
+      for (let i=2; i<11; i++) row.push(
+        {value: j*i, nHits: 0, nMistakes: 0, isVisible: false}
+        )
       this.items.push(row);
-      window.addEventListener('keydown', this.keydown);
     }
+    window.addEventListener('keydown', this.keydown);
+  },
+  mounted() {
+  //  console.log(this.$refs.refCell)
   },
   beforeDestroy() {
     window.removeEventListener('keydown', this.keydown);
