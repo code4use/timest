@@ -7,9 +7,9 @@
             {{h}}
           </div>
         </div>
-        <div v-for="(row,indexi) in items" :key="indexi" class="row"> 
-          <div class="cells headings">{{indexi+2}}</div>
-          <div @click="clickcell(indexi,indexj,$event)" v-for="(cell,indexj) in row" :key="indexj" class="cells">
+        <div v-for="(row,indexj) in items" :key="indexj" class="row"> 
+          <div class="cells headings">{{indexj+2}}</div>
+          <div ref="refDiv" @click="clickcell(indexi,indexj,$event)" v-for="(cell,indexi) in row" :key="indexi" class="cells">
             <span ref="refCell" v-show="cell.isVisible"> {{ cell.value }} </span>
           </div>
         </div>
@@ -36,17 +36,15 @@
 <script>
 export default {
   name: 'TimesT',
-  props: {
-    msg: String
-  },
+  //props: { msg: String },
   data() {
-    return { current: '', items: [] }
+    return { current: '', j: 0, i: 0, items: [] }
   },
   created() {
     for (let j=2; j<11; j++) {
       let row = []
       for (let i=2; i<11; i++) row.push(
-        {value: j*i, nHits: 0, nMistakes: 0, isVisible: false}
+        {value: String(j*i), nHits: 0, nMistakes: 0, isVisible: false}
         )
       this.items.push(row);
     }
@@ -54,6 +52,7 @@ export default {
   },
   mounted() {
   //  console.log(this.$refs.refCell)
+    this.reset();
   },
   beforeDestroy() {
     window.removeEventListener('keydown', this.keydown);
@@ -62,22 +61,58 @@ export default {
     clickkey(event) {
       if ("0123456789".includes(event.target.textContent)) {
         this.current+=event.target.textContent;
+        this.checkEntered();
       } else if (event.target.textContent === 'Del') {
         this.current=this.current.slice(0,-1);
+      } else if (event.target.textContent == 'Reset') {
+        this.reset();
       }
+
     },
     keydown(event) {
-      if ('0123456789'.includes(event.key)) this.current+=event.key;
+      if ('0123456789'.includes(event.key)) {
+        this.current+=event.key;
+        this.checkEntered();
+      }
       else if (event.key === 'Delete' || event.key === 'Backspace')
         this.current=this.current.slice(0,-1);
-      //console.log(event);
     },
     // eslint-disable-next-line no-unused-vars
     clickcell(i,j,event) {
-      this.items[i][j].isVisible=!this.items[i][j].isVisible;
-      if(i!=j) this.items[j][i].isVisible=this.items[i][j].isVisible;
-  }
+      this.showcell(i,j);
+    },
+    showcell(i,j) {
+      this.items[j][i].isVisible=true;
+      //if(i!=j) this.items[i][j].isVisible=true;    
+    },
+    reset () {
+      this.i=0;
+      this.j=0;
+      this.$refs.refDiv[this.i+this.j*9].style.backgroundColor='yellow';
+      for(let j=0; j<9; j++) {
+        for(let i=0; i<9; i++) {
+          if( this.items[j][i].isVisible ) this.items[j][i].isVisible=false;
+        }
+      }
+    },
+    checkEntered() {
+      let i=this.i, j=this.j
+      if (this.items[j][i].value === this.current) {
+        this.showcell(i,j);
+        this.$refs.refDiv[i+j*9].style.backgroundColor='lightgreen';
+        if(i!=j) this.showcell(j,i);
+        if (i<8) {
+          this.i++;
+          this.$refs.refDiv[this.i+this.j*9].style.backgroundColor='yellow';
+        } else if (j<8) {
+          this.j++;
+          this.i=this.j;
+          this.$refs.refDiv[this.i+this.j*9].style.backgroundColor='yellow';
+        }     
+        this.current='';
 
+      }
+    }
   }
 
 }
@@ -118,6 +153,10 @@ export default {
 .cells{
   border:1px solid darkgray;
   background-color: lightgreen;
+}
+
+.selectedcell{
+    background-color: yellow;
 }
 
 .headings {
