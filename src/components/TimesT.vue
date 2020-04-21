@@ -43,9 +43,12 @@ export default {
   created() {
     for (let j=2; j<11; j++) {
       let row = []
-      for (let i=2; i<11; i++) row.push(
-        {value: String(j*i), nHits: 0, nMistakes: 0, isVisible: false}
-        )
+      for (let i=2; i<11; i++) row.push( {
+          value: String(j*i),
+          nHits: 0,
+          nMistakes: 0,
+          isVisible: false 
+          } )
       this.items.push(row);
     }
     window.addEventListener('keydown', this.keydown);
@@ -88,7 +91,7 @@ export default {
     reset () {
       this.i=0;
       this.j=0;
-      this.$refs.refDiv[this.i+this.j*9].style.backgroundColor='yellow';
+      this.$refs.refDiv[this.i+this.j*9].classList.add('selectedcell');
       for(let j=0; j<9; j++) {
         for(let i=0; i<9; i++) {
           if( this.items[j][i].isVisible ) this.items[j][i].isVisible=false;
@@ -99,15 +102,15 @@ export default {
       let i=this.i, j=this.j
       if (this.items[j][i].value === this.current) {
         this.showcell(i,j);
-        this.$refs.refDiv[i+j*9].style.backgroundColor='lightgreen';
+        this.$refs.refDiv[i+j*9].classList.toggle('selectedcell');
         if(i!=j) this.showcell(j,i);
         if (i<8) {
           this.i++;
-          this.$refs.refDiv[this.i+this.j*9].style.backgroundColor='yellow';
+          this.$refs.refDiv[this.i+this.j*9].classList.toggle('selectedcell');
         } else if (j<8) {
           this.j++;
           this.i=this.j;
-          this.$refs.refDiv[this.i+this.j*9].style.backgroundColor='yellow';
+          this.$refs.refDiv[this.i+this.j*9].classList.toggle('selectedcell');
         }     
         this.current='';
 
