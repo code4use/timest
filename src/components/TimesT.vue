@@ -47,7 +47,7 @@ export default {
           value: String(j*i),
           nHits: 0,
           nMistakes: 0,
-          isVisible: false 
+          isVisible: true
           } )
       this.items.push(row);
     }
@@ -55,7 +55,7 @@ export default {
   },
   mounted() {
   //  console.log(this.$refs.refCell)
-    this.reset();
+  //  this.reset();
   },
   beforeDestroy() {
     window.removeEventListener('keydown', this.keydown);
@@ -77,8 +77,10 @@ export default {
         this.current+=event.key;
         this.checkEntered();
       }
-      else if (event.key === 'Delete' || event.key === 'Backspace')
+      else if (event.key === 'Delete' || event.key === 'Backspace') {
         this.current=this.current.slice(0,-1);
+        event.preventDefault();
+      }
     },
     // eslint-disable-next-line no-unused-vars
     clickcell(i,j,event) {
@@ -89,14 +91,15 @@ export default {
       //if(i!=j) this.items[i][j].isVisible=true;    
     },
     reset () {
+      this.$refs.refDiv[this.j*9+this.i].classList.remove('selectedcell');
       this.i=0;
       this.j=0;
-      this.$refs.refDiv[this.i+this.j*9].classList.add('selectedcell');
       for(let j=0; j<9; j++) {
         for(let i=0; i<9; i++) {
           if( this.items[j][i].isVisible ) this.items[j][i].isVisible=false;
         }
       }
+      this.$refs.refDiv[this.i+this.j*9].classList.toggle('selectedcell');
     },
     checkEntered() {
       let i=this.i, j=this.j
