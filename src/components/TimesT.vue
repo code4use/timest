@@ -94,9 +94,9 @@ export default {
       this.$refs.refDiv[this.j*9+this.i].classList.remove('selectedcell');
       this.i=0;
       this.j=0;
-      for(let j=0; j<9; j++) {
-        for(let i=0; i<9; i++) {
-          if( this.items[j][i].isVisible ) this.items[j][i].isVisible=false;
+      for (let row of this.items) {
+        for (let cell of row) {
+          if (cell.isVisible) cell.isVisible=false;
         }
       }
       this.$refs.refDiv[this.i+this.j*9].classList.toggle('selectedcell');
