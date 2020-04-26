@@ -9,13 +9,13 @@
         </div>
         <div v-for="(row,indexj) in items" :key="indexj" class="row"> 
           <div class="cells headings">{{indexj+2}}</div>
-          <div @click="clickcell(indexi,indexj,$event)" v-for="(cell,indexi) in row" :key="indexi" class="cells" :class="{ selectedcell: cell.isLighted }">
+          <div v-for="(cell,indexi) in row" :key="indexi" class="cells" :class="{ selectedcell: cell.isLighted }">
             <span v-show="cell.isVisible"> {{ cell.value }} </span>
           </div>
         </div>
       </div>
     <hr>
-    <div class="display">{{ current || '0' }}</div>
+    <div class="display">{{ enteredString || '0' }}</div>
     <div @click="clickkey" class="keyscontainer">
     <div class="keys">1</div>
     <div class="keys">2</div>
@@ -38,7 +38,7 @@ export default {
   name: 'TimesT',
   //props: { msg: String },
   data() {
-    return { current: '', j: 0, i: 0, items: [] }
+    return { enteredString: '', j: 0, i: 0, items: [] }
   },
   computed: {
     highLighted: {
@@ -48,6 +48,9 @@ export default {
       set: function (newValue){
         this.items[this.j][this.i].isLighted=newValue;
       }
+    },
+    currentCell: function() {
+      return this.items[this.j][this.i]
     }
   },
   created() {
@@ -64,9 +67,7 @@ export default {
     }
     window.addEventListener('keydown', this.keydown);
   },
-  mounted() {
-  //  console.log(this.$refs.refCell)
-  },
+
   beforeDestroy() {
     window.removeEventListener('keydown', this.keydown);
   },
@@ -74,10 +75,10 @@ export default {
 
     clickkey(event) {
       if ("0123456789".includes(event.target.textContent)) {
-        this.current+=event.target.textContent;
+        this.enteredString+=event.target.textContent;
         this.checkEntered();
       } else if (event.target.textContent === 'Del') {
-        this.current=this.current.slice(0,-1);
+        this.enteredString=this.enteredString.slice(0,-1);
       } else if (event.target.textContent == 'Start') {
         this.reset();
       }
@@ -85,17 +86,13 @@ export default {
 
     keydown(event) {
       if ('0123456789'.includes(event.key)) {
-        this.current+=event.key;
+        this.enteredString+=event.key;
         this.checkEntered();
       }
       else if (event.key === 'Delete' || event.key === 'Backspace') {
-        this.current=this.current.slice(0,-1);
+        this.enteredString=this.enteredString.slice(0,-1);
         event.preventDefault();
       }
-    },
-    // eslint-disable-next-line no-unused-vars
-    clickcell(i,j,event) {
-      this.showcell(i,j);
     },
 
     showcell(i,j) {
@@ -112,12 +109,12 @@ export default {
           if (cell.highLighted) cell.highLighted=false;
         }
       }
-      this.items[0][0].isLighted=true;
+      this.currentCell.isLighted=true;
     },
 
     checkEntered() {
       let i=this.i, j=this.j
-      if (this.items[j][i].value === this.current) {
+      if (this.currentCell.value === this.enteredString) {
         this.showcell(i,j);
         this.highLighted=false;
         if(i!=j) this.showcell(j,i);
@@ -129,7 +126,7 @@ export default {
           this.i=this.j;
           this.highLighted=true
         }     
-        this.current='';
+        this.enteredString='';
 
       }
     }
