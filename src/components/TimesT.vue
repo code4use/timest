@@ -135,7 +135,7 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- Add "scoped" attribute to limit CSS to this component only -->np 
 <style scoped>
 .timest {
   width: 320px;
