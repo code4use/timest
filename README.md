@@ -1,4 +1,4 @@
-# timest
+# ttimes
 
 ## Project setup
 ```

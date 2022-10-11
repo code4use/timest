@@ -1,9 +1,4 @@
-import Vue from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
 
-Vue.config.productionTip = false
-
-let app = new Vue({
-  render: h => h(App),
-})
-app.$mount('#app')
+createApp(App).mount("#app");

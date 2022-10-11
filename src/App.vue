@@ -5,14 +5,14 @@
 </template>
 
 <script>
-import TimesT from './components/TimesT.vue'
+import TimesT from "./components/TimesT.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    TimesT
-  }
-}
+    TimesT,
+  },
+};
 </script>
 
 <style>
@@ -20,7 +20,8 @@ export default {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0px !important;
   padding: 0px !important;
 }
