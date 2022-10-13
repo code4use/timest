@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @keydown.prevent.stop="keydown">
     <TimesT />
   </div>
 </template>

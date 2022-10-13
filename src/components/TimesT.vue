@@ -77,11 +77,11 @@ export default {
         });
       this.items.push(row);
     }
-    window.addEventListener("keydown", this.keydown);
+    //    window.addEventListener("keydown", this.keydown);
   },
 
   beforeUnmount() {
-    window.removeEventListener("keydown", this.keydown);
+    //    window.removeEventListener("keydown", this.keydown);
   },
   methods: {
     clickkey(event) {
